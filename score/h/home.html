@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Interview Score Predictor</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f7fb;
+            margin:0;
+            padding:0;
+        }
+
+        .container{
+            width:500px;
+            margin:40px auto;
+            background:white;
+            padding:25px;
+            border-radius:12px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            text-align:center;
+            color:#333;
+        }
+
+        .form-group{
+            margin-bottom:15px;
+        }
+
+        label{
+            font-weight:bold;
+            display:block;
+            margin-bottom:5px;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            font-size:15px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#2563eb;
+            color:white;
+            border:none;
+            border-radius:6px;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+        }
+
+        .result{
+            margin-top:20px;
+            padding:15px;
+            background:#e0f2fe;
+            border-radius:8px;
+            text-align:center;
+            font-size:20px;
+            font-weight:bold;
+            color:#0f172a;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Interview Performance Predictor</h2>
+
+    <div class="form-group">
+        <label>Text Score</label>
+        <input type="number" id="text_score">
+    </div>
+
+    <div class="form-group">
+        <label>Audio Score</label>
+        <input type="number" id="audio_score">
+    </div>
+
+    <div class="form-group">
+        <label>Video Score</label>
+        <input type="number" id="video_score">
+    </div>
+
+    <div class="form-group">
+        <label>Image Score</label>
+        <input type="number" id="image_score">
+    </div>
+
+    <div class="form-group">
+        <label>Filler Rate</label>
+        <input type="number" id="filler_rate">
+    </div>
+
+    <div class="form-group">
+        <label>Words Per Minute (WPM)</label>
+        <input type="number" id="wpm">
+    </div>
+
+    <div class="form-group">
+        <label>Eye Contact %</label>
+        <input type="number" id="eye_contact_pct">
+    </div>
+
+    <div class="form-group">
+        <label>Posture Score</label>
+        <input type="number" id="posture_score">
+    </div>
+
+    <button onclick="predictScore()">Predict Score</button>
+
+    <div class="result" id="result">
+        Predicted Score: --
+    </div>
+
+</div>
+
+<script>
+
+    /*
+        Example Linear Regression Coefficients
+        Replace these with your trained model coefficients
+    */
+
+    const coefficients = {
+        text_score: 0.20,
+        audio_score: 0.15,
+        video_score: 0.15,
+        image_score: 0.10,
+        filler_rate: -1.5,
+        wpm: 0.08,
+        eye_contact_pct: 0.15,
+        posture_score: 0.17
+    };
+
+    const intercept = 5;
+
+    function predictScore(){
+
+        const text_score = parseFloat(document.getElementById("text_score").value) || 0;
+        const audio_score = parseFloat(document.getElementById("audio_score").value) || 0;
+        const video_score = parseFloat(document.getElementById("video_score").value) || 0;
+        const image_score = parseFloat(document.getElementById("image_score").value) || 0;
+        const filler_rate = parseFloat(document.getElementById("filler_rate").value) || 0;
+        const wpm = parseFloat(document.getElementById("wpm").value) || 0;
+        const eye_contact_pct = parseFloat(document.getElementById("eye_contact_pct").value) || 0;
+        const posture_score = parseFloat(document.getElementById("posture_score").value) || 0;
+
+        let prediction =
+            intercept +
+            (coefficients.text_score * text_score) +
+            (coefficients.audio_score * audio_score) +
+            (coefficients.video_score * video_score) +
+            (coefficients.image_score * image_score) +
+            (coefficients.filler_rate * filler_rate) +
+            (coefficients.wpm * wpm) +
+            (coefficients.eye_contact_pct * eye_contact_pct) +
+            (coefficients.posture_score * posture_score);
+
+        prediction = Math.max(0, Math.min(100, prediction));
+
+        document.getElementById("result").innerHTML =
+            "Predicted Score: " + prediction.toFixed(2);
+
+    }
+
+</script>
+
+</body>
+</html>
